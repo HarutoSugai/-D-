@@ -9,7 +9,12 @@ delta={pg.K_UP:(0,-1),
 
 def main():
     kaiten=0
+    bbsize=20
     time=0
+    bwnd=0
+    rr=255
+    gg=0
+    bb=0
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((1600, 900))
     clock = pg.time.Clock()
@@ -18,7 +23,7 @@ def main():
     kk_img = pg.transform.rotozoom(kk_img, kaiten, 2.0)
     kk_rct=kk_img.get_rect()
     tmr = 0
-    bb_img = pg.Surface((20,20))
+    bb_img = pg.Surface((bbsize,bbsize))
     pg.draw.circle(bb_img,(255,0,0),(10,10),10)
     bb_img.set_colorkey((0,0,0))
     x,y=random.randint(0,1600),random.randint(0,900) 
@@ -35,6 +40,15 @@ def main():
                 return 0
 
         tmr += 1
+        if tmr%1000==200:
+            bb_img = pg.Surface((bbsize,bbsize))
+            pg.draw.circle(bb_img,(rr,gg,bb),(bbsize/2,bbsize/2),bbsize/2)
+            bb_img.set_colorkey((0,0,0))
+            bbsize+=10
+            rr=255
+            bb=0
+            gg=0
+        
 
         key_lst=lst=pg.key.get_pressed()
         for k,mv in delta.items():
@@ -50,9 +64,22 @@ def main():
         bb_rct.move_ip(vx,vy)
         yoko,tate=c_b(screen.get_rect(),bb_rct)
         if not yoko:  #横にはみ出ている
-            vx*=-1
+            vx*=-1.2
+            bwnd+=1
+            bb_img = pg.Surface((bbsize,bbsize))
+            pg.draw.circle(bb_img,(rr,gg,bb),(bbsize/2,bbsize/2),bbsize/2)
+            bb_img.set_colorkey((0,0,0))
+            rr=0
+            bb=255
+            gg=0
         if not tate:  #縦にはみ出ている
             vy*=-1
+            bb_img = pg.Surface((bbsize,bbsize))
+            pg.draw.circle(bb_img,(rr,gg,bb),(bbsize/2,bbsize/2),bbsize/2)
+            bb_img.set_colorkey((0,0,0))
+            rr=0
+            bb=0
+            gg=255
 
         screen.blit(bb_img,bb_rct)
 
@@ -62,6 +89,11 @@ def main():
             
             time+=1
             if time>=50:
+                return
+        
+        if time>=1:
+            time+=1
+            if time>50:
                 return
 
         pg.display.update()
