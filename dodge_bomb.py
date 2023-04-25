@@ -93,6 +93,9 @@ def main():
         
         if time>=1:
             time+=1
+            kaiten=5
+            kk_img = pg.transform.rotozoom(kk_img, kaiten, 0.95)
+            
             if time>50:
                 return
 
