@@ -54,6 +54,7 @@ def main():
         for k,mv in delta.items():
             if key_lst[k]:
                 kk_rct.move_ip(mv)
+
         if c_b(screen.get_rect(),kk_rct)!=(True,True):
             for k,mv in delta.items():
                 if key_lst[k]:
@@ -63,6 +64,7 @@ def main():
         screen.blit(kk_img, kk_rct)
         bb_rct.move_ip(vx,vy)
         yoko,tate=c_b(screen.get_rect(),bb_rct)
+
         if not yoko:  #横にはみ出ている
             vx*=-1.2
             bwnd+=1
@@ -72,6 +74,7 @@ def main():
             rr=0
             bb=255
             gg=0
+            
         if not tate:  #縦にはみ出ている
             vy*=-1
             bb_img = pg.Surface((bbsize,bbsize))
@@ -116,9 +119,9 @@ def c_b(scrrct:pg.Rect,objrct:pg.Rect)-> tuple[bool,bool]:
     """
     yoko,tate=True,True
 
-    if objrct.left<scrrct.left or scrrct.right<objrct.right:
+    if objrct.left < scrrct.left or scrrct.right < objrct.right:
         yoko=False
-    if objrct.top<scrrct.top or scrrct.bottom<objrct.bottom:
+    if objrct.top < scrrct.top or scrrct.bottom < objrct.bottom:
         tate=False
     return yoko,tate
 
